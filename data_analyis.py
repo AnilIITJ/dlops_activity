@@ -13,7 +13,28 @@ def load_data(file_path):
         print(f"An error occurred: {e}")
         return None
 
-def analyze_data(data):
+def analyze_data(data, roll_number):
+    """Perform basic data analysis based on roll number."""
+    if data is not None:
+        if roll_number % 2 == 0:
+            # Check for missing values
+            missing_values = data.isnull().sum()
+            if missing_values.any():
+                print("Missing values found in the following columns:")
+                print(missing_values[missing_values > 0])
+            else:
+                print("No missing values found.")
+        else:
+            # Encoding categorical values
+            # Assuming 'Class' is the categorical column to be encoded
+            if 'Class' in data.columns:
+                data['Class'] = data['Class'].astype('category').cat.codes
+                print("Categorical values in 'Class' column have been encoded.")
+            else:
+                print("No 'Class' column found for encoding.")
+
+        # Rest of the analysis...
+
     """Perform basic data analysis."""
     if data is not None:
         # Display summary statistics
@@ -38,9 +59,10 @@ def analyze_data(data):
         plt.show()
 
 def main():
-    file_path = input("Enter the path to the CSV file: ")
+    roll_number = int(input("Enter your roll number: "))
+    file_path = input("Enter the path to the Excel file: ")
     data = load_data(file_path)
-    analyze_data(data)
+    analyze_data(data, roll_number)
 
 if __name__ == "__main__":
     main()
